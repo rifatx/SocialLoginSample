@@ -57,8 +57,28 @@
             <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/action_sign_in_with_auth0"
-                    android:id="@+id/auth0_sign_in_button" />
+                    android:text="@string/action_sign_in_with_g"
+                    android:id="@+id/g_sign_in_button" />
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_sign_in_with_i"
+                    android:id="@+id/i_sign_in_button" />
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_sign_in_with_l"
+                    android:id="@+id/l_sign_in_button" />
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_sign_in_with_t"
+                    android:id="@+id/t_sign_in_button" />
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_sign_in_with_f"
+                    android:id="@+id/f_sign_in_button" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

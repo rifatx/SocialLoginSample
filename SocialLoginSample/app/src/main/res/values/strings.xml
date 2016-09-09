@@ -4,7 +4,11 @@
     <!-- Strings related to login -->
     <string name="facebook_app_id">1671329073123097</string>
 
-    <string name="action_sign_in_with_auth0">Sign in with Auth0</string>
+    <string name="action_sign_in_with_g">Auth0 g</string>
+    <string name="action_sign_in_with_i">Auth0 i</string>
+    <string name="action_sign_in_with_l">Auth0 l</string>
+    <string name="action_sign_in_with_f">Auth0 f</string>
+    <string name="action_sign_in_with_t">Auth0 t</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>

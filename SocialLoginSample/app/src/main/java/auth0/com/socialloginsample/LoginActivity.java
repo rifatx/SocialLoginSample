@@ -76,7 +76,11 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton mFacebookSignInButton;
     private TwitterLoginButton mTwitterSignInButton;
     private Button mInstagramSignInButton;
-    private Button mAuth0SignInButton;
+    private Button mGSignInButton;
+    private Button mFSignInButton;
+    private Button mISignInButton;
+    private Button mLSignInButton;
+    private Button mTSignInButton;
 
     // Vars
     private GoogleApiClient mGoogleApiClient;
@@ -100,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-        mGoogleSignInButton = (SignInButton)findViewById(R.id.google_sign_in_button);
+        mGoogleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
         mGoogleSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,34 +112,34 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mFacebookSignInButton = (LoginButton)findViewById(R.id.facebook_sign_in_button);
+        mFacebookSignInButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
         mFacebookSignInButton.registerCallback(mFacebookCallbackManager,
-            new FacebookCallback<LoginResult>() {
-                @Override
-                public void onSuccess(final LoginResult loginResult) {
-                    handleSignInResult(new Callable<Void>() {
-                        @Override
-                        public Void call() throws Exception {
-                            LoginManager.getInstance().logOut();
-                            return null;
-                        }
-                    });
-                }
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(final LoginResult loginResult) {
+                        handleSignInResult(new Callable<Void>() {
+                            @Override
+                            public Void call() throws Exception {
+                                LoginManager.getInstance().logOut();
+                                return null;
+                            }
+                        });
+                    }
 
-                @Override
-                public void onCancel() {
-                    handleSignInResult(null);
-                }
+                    @Override
+                    public void onCancel() {
+                        handleSignInResult(null);
+                    }
 
-                @Override
-                public void onError(FacebookException error) {
-                    Log.d(LoginActivity.class.getCanonicalName(), error.getMessage());
-                    handleSignInResult(null);
+                    @Override
+                    public void onError(FacebookException error) {
+                        Log.d(LoginActivity.class.getCanonicalName(), error.getMessage());
+                        handleSignInResult(null);
+                    }
                 }
-            }
         );
 
-        mTwitterSignInButton = (TwitterLoginButton)findViewById(R.id.twitter_sign_in_button);
+        mTwitterSignInButton = (TwitterLoginButton) findViewById(R.id.twitter_sign_in_button);
         mTwitterSignInButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(final Result<TwitterSession> result) {
@@ -155,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mInstagramSignInButton = (Button)findViewById(R.id.instagram_sign_in_button);
+        mInstagramSignInButton = (Button) findViewById(R.id.instagram_sign_in_button);
         mInstagramSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,22 +167,56 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mAuth0SignInButton = (Button) findViewById(R.id.auth0_sign_in_button);
-        mAuth0SignInButton.setOnClickListener(new OnClickListener() {
+
+        mGSignInButton = (Button) findViewById(R.id.g_sign_in_button);
+        mGSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInWithAuth0();
+                auth0SignIn("google-oauth2");
+            }
+        });
+
+        mFSignInButton = (Button) findViewById(R.id.f_sign_in_button);
+        mFSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth0SignIn("facebook");
+            }
+        });
+
+        mISignInButton = (Button) findViewById(R.id.i_sign_in_button);
+        mISignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth0SignIn("instagram");
+
+            }
+        });
+
+        mTSignInButton = (Button) findViewById(R.id.t_sign_in_button);
+        mTSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth0SignIn("twitter");
+            }
+        });
+
+        mLSignInButton = (Button) findViewById(R.id.l_sign_in_button);
+        mLSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth0SignIn("linkedin");
             }
         });
     }
 
-    private void signInWithAuth0() {
+    private void auth0SignIn(String provider) {
         final Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("https")
                 .authority("deneyim.auth0.com")
                 .appendPath("authorize")
                 .appendQueryParameter("client_id", "yYRqKx54bz2W46EzK2bttYSNo9l2QjTa")
-                .appendQueryParameter("connection", "google-oauth2")
+                .appendQueryParameter("connection", provider)
                 .appendQueryParameter("redirect_uri", "oauthlogin://redirect")
                 .appendQueryParameter("response_type", "code");
         final Intent browser = new Intent(Intent.ACTION_VIEW, uriBuilder.build());
@@ -193,7 +231,7 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
-            if(result.isSuccess()) {
+            if (result.isSuccess()) {
                 final GoogleApiClient client = mGoogleApiClient;
 
                 handleSignInResult(new Callable<Void>() {
@@ -202,15 +240,15 @@ public class LoginActivity extends AppCompatActivity {
                         if (client != null) {
 
                             Auth.GoogleSignInApi.signOut(client).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        Log.d(LoginActivity.class.getCanonicalName(),
-                                                status.getStatusMessage());
+                                    new ResultCallback<Status>() {
+                                        @Override
+                                        public void onResult(Status status) {
+                                            Log.d(LoginActivity.class.getCanonicalName(),
+                                                    status.getStatusMessage());
 
                                         /* TODO: handle logout failures */
+                                        }
                                     }
-                                }
                             );
 
                         }
@@ -222,7 +260,7 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 handleSignInResult(null);
             }
-        } else if(TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE == requestCode) {
+        } else if (TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE == requestCode) {
             mTwitterSignInButton.onActivityResult(requestCode, resultCode, data);
         } else {
             mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
@@ -230,7 +268,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signInWithGoogle() {
-        if(mGoogleApiClient != null) {
+        if (mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();
         }
 
@@ -248,19 +286,19 @@ public class LoginActivity extends AppCompatActivity {
     private void signInWithInstagram() {
         final Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("https")
-                  .authority("api.instagram.com")
-                  .appendPath("oauth")
-                  .appendPath("authorize")
-                  .appendQueryParameter("client_id", "18a8b74da9644bd7a9294caef1c5e76c")
-                  .appendQueryParameter("redirect_uri", "sociallogin://redirect")
-                  .appendQueryParameter("response_type", "token");
+                .authority("api.instagram.com")
+                .appendPath("oauth")
+                .appendPath("authorize")
+                .appendQueryParameter("client_id", "18a8b74da9644bd7a9294caef1c5e76c")
+                .appendQueryParameter("redirect_uri", "sociallogin://redirect")
+                .appendQueryParameter("response_type", "token");
         final Intent browser = new Intent(Intent.ACTION_VIEW, uriBuilder.build());
         startActivity(browser);
     }
 
     private void checkForInstagramData() {
         final Uri data = this.getIntent().getData();
-        if(data != null && data.getScheme().equals("sociallogin") && data.getFragment() != null) {
+        if (data != null && data.getScheme().equals("sociallogin") && data.getFragment() != null) {
             final String accessToken = data.getFragment().replaceFirst("access_token=", "");
             if (accessToken != null) {
                 handleSignInResult(new Callable<Void>() {
@@ -277,7 +315,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void handleSignInResult(Callable<Void> logout) {
-        if(logout == null) {
+        if (logout == null) {
             /* Login error */
             Toast.makeText(getApplicationContext(), R.string.login_error, Toast.LENGTH_SHORT).show();
         } else {
